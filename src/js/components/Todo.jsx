@@ -13,7 +13,12 @@ export class Todo extends React.Component {
 
   _onSubmit(e) {
     e.preventDefault();
-    let val = ReactDOM.findDOMNode(this.refs.text).value;
+    let ref = ReactDOM.findDOMNode(this.refs.text)
+    let val = ref.value;
+
+    if(!val) return;
+
+    ref.value = '';
 
     store.dispatch({
       type: 'ADD_TODO',
@@ -35,6 +40,17 @@ export class Todo extends React.Component {
     this.state = store.getState();
   }
 
+  _onToggleFilter(filter, e) {
+    e.preventDefault();
+
+    store.dispatch({
+      type: 'SET_VISIBILITY_FILTER',
+      filter
+    });
+
+    this.state = store.getState();
+  }
+
   render() {
     return (
       <div>
@@ -44,6 +60,11 @@ export class Todo extends React.Component {
         </form>
         <ul>
           {this.state.todos.map((todo, index) => {
+            let filter = this.state.visibilityFilter;
+            if(filter !== 'SHOW_ALL') {
+              if(filter === 'SHOW_COMPLETED' && !todo.completed) return null;
+              if(filter === 'SHOW_NOT_COMPLETED' && todo.completed) return null;
+            }
             return (
               <li key={todo.id}>
                 <a href="#" style={{textDecoration: todo.completed ? 'line-through' : 'none'}} onClick={this._toggleTodo.bind(this, todo)}>
@@ -53,6 +74,10 @@ export class Todo extends React.Component {
             );
           })}
         </ul>
+
+        <a href="#" onClick={this._onToggleFilter.bind(this, 'SHOW_ALL')}>All</a>,
+        <a href="#" onClick={this._onToggleFilter.bind(this, 'SHOW_COMPLETED')}>Completed</a>,
+        <a href="#" onClick={this._onToggleFilter.bind(this, 'SHOW_NOT_COMPLETED')}>Not completed</a>
       </div>
     );
   }
