@@ -21,7 +21,7 @@ document.body.appendChild(div);
 const render = () => {
   ReactDOM.render(
     <div>
-      <Todo />
+      <Todo {...store.getState()} />
     </div>
   , div);
 };

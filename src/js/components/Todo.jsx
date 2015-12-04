@@ -24,8 +24,6 @@ export class Todo extends React.Component {
       type: 'ADD_TODO',
       text: val
     });
-
-    this.state = store.getState();
   }
 
   _toggleTodo(todo, e) {
@@ -35,8 +33,6 @@ export class Todo extends React.Component {
       type: 'TOGGLE_TODO',
       id: todo.id
     });
-
-    this.state = store.getState();
   }
 
   _onToggleFilter(filter, e) {
@@ -46,8 +42,6 @@ export class Todo extends React.Component {
       type: 'SET_VISIBILITY_FILTER',
       filter
     });
-
-    this.state = store.getState();
   }
 
   render() {
@@ -58,8 +52,8 @@ export class Todo extends React.Component {
           <input type="submit" value="Submit" />
         </form>
         <ul>
-          {this.state.todos.map((todo, index) => {
-            let filter = this.state.visibilityFilter;
+          {this.props.todos.map((todo, index) => {
+            let filter = this.props.visibilityFilter;
             if(filter !== 'SHOW_ALL') {
               if(filter === 'SHOW_COMPLETED' && !todo.completed) return null;
               if(filter === 'SHOW_NOT_COMPLETED' && todo.completed) return null;
