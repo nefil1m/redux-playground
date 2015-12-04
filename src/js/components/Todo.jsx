@@ -22,7 +22,6 @@ export class Todo extends React.Component {
 
     store.dispatch({
       type: 'ADD_TODO',
-      id: this.state.todos.length + 1,
       text: val
     });
 
