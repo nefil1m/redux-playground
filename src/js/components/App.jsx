@@ -1,13 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {createStore} from 'redux';
 
-class App extends React.Component {
-  render() {
-    return <h1>Hello</h1>
+const counter = (state = 0, action) => {
+  switch(action.type) {
+    case 'INCREMENT':
+      return state + 1;
+    case 'DECREMENT':
+      return state - 1;
+    default:
+      return state;
   }
-}
+};
+
+const Counter = ({
+  value,
+  onIncrement,
+  onDecrement
+}) => (
+  <div>
+    <h1>{value}</h1>
+    <button onClick={onIncrement}>+</button>
+    <button onClick={onDecrement}>-</button>
+  </div>
+);
+
+const store =  createStore(counter);
 
 let div = document.createElement('div');
 document.body.appendChild(div)
 
-ReactDOM.render(<App />, div);
+const render = () => {
+  ReactDOM.render(
+    <Counter
+      value={store.getState()}
+      onIncrement={() => {
+        store.dispatch({
+          type: 'INCREMENT'
+        });
+      }}
+      onDecrement={() => {
+        store.dispatch({
+          type: 'DECREMENT'
+        })
+      }} />
+  , div);
+};
+
+store.subscribe(render);
+render();
